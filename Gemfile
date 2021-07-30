@@ -12,6 +12,8 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 
 # API
 gem 'batch-loader', '~> 1.4.1'
+gem 'graphql', '1.9.14'
+gem 'graphql-errors', '~> 0.4.0'
 gem 'rack-cors', '~> 1.1.1'
 
 # business logic
