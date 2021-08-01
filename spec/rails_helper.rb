@@ -22,7 +22,7 @@ Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.include GraphQL::RequestHelpers, type: :request
-  config.include GraphQL::MutationHelper, type: :request
+  config.include GraphQL::MutationHelpers, type: :request
   config.include GraphQL::QueryHelpers, type: :request
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

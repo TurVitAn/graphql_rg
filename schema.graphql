@@ -1,0 +1,383 @@
+"""
+Auth token provider
+"""
+type AuthTokenType {
+  """
+  Access JWT token
+  """
+  access: String!
+
+  """
+  CSRF protection token
+  """
+  csrf: String!
+
+  """
+  JWT token for refreshing access token
+  """
+  refresh: String!
+}
+
+"""
+Interface for images
+"""
+interface ImageInterface {
+  """
+  Image file path
+  """
+  filePath: String
+}
+
+"""
+The connection type for MovieType.
+"""
+type MovieConnectionType {
+  """
+  Number of current page
+  """
+  currentPage: Int!
+
+  """
+  A list of edges.
+  """
+  edges: [MovieEdgeType]
+
+  """
+  List of connected node identifiers
+  """
+  nodeIds: [ID!]!
+
+  """
+  A list of nodes.
+  """
+  nodes: [MovieType]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Total # of objects returned from query
+  """
+  totalCount: Int!
+
+  """
+  Total # of pages, based on total count and pagesize
+  """
+  totalPageCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type MovieEdgeType {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: MovieType
+}
+
+"""
+Movie image type
+"""
+type MovieImageType implements ImageInterface {
+  """
+  Image file path
+  """
+  filePath: String
+}
+
+"""
+Movie type
+"""
+type MovieType implements NodeInterface {
+  """
+  Movie's budget
+  """
+  budget: Int
+
+  """
+  Globally unique identifier
+  """
+  id: ID!
+
+  """
+  Movie's images
+  """
+  images: [MovieImageType!]
+
+  """
+  Original movie original_language
+  """
+  originalLanguage: String
+
+  """
+  Original movie original_title
+  """
+  originalTitle: String
+
+  """
+  Movie's overview
+  """
+  overview: String
+
+  """
+  Movie's poster image
+  """
+  poster: PosterType
+
+  """
+  Movie's revenue
+  """
+  revenue: Int
+
+  """
+  Movie's runtime in seconds
+  """
+  runtime: Int
+
+  """
+  Movie's title
+  """
+  title: String!
+}
+
+type Mutation {
+  """
+  Updating current access token with refresh token
+  """
+  refreshToken: RefreshedAccessPayloadType!
+
+  """
+  Sign in a user
+  """
+  userSignIn(input: UserSignInInput!): AuthTokenType!
+
+  """
+  Sign out a user
+  """
+  userSignOut: SignOutType
+
+  """
+  Sign up a user
+  """
+  userSignUp(input: UserSignUpInput!): AuthTokenType!
+}
+
+"""
+An object with an ID to support global identification
+"""
+interface Node {
+  """
+  Globally unique identifier
+  """
+  id: ID!
+}
+
+"""
+An object with an ID to support global identification
+"""
+interface NodeInterface {
+  """
+  Globally unique identifier
+  """
+  id: ID!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+"""
+Movie poster type
+"""
+type PosterType implements ImageInterface {
+  """
+  Image file path
+  """
+  filePath: String
+}
+
+type Query {
+  """
+  Get current user
+  """
+  me: UserAccountType!
+
+  """
+  Query to get the movie by id
+  """
+  movie(id: ID!): MovieType!
+
+  """
+  Query to search movies by title
+  """
+  moviesSearch(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): MovieConnectionType!
+}
+
+"""
+Payload with refreshed access tokens
+"""
+type RefreshedAccessPayloadType {
+  """
+  JWT access token
+  """
+  access: String!
+
+  """
+  Expiration of access tokens
+  """
+  accessExpiresAt: String!
+
+  """
+  Token for signed cookies
+  """
+  csrf: String!
+}
+
+"""
+User sign out
+"""
+type SignOutType {
+  """
+  will return true if the user log out
+  """
+  completed: Boolean
+}
+
+"""
+User account
+"""
+type UserAccountType implements Node {
+  """
+  Email of user account
+  """
+  email: String!
+
+  """
+  Globally unique identifier
+  """
+  id: ID!
+
+  """
+  User account's profile
+  """
+  userProfile: UserProfileType
+}
+
+"""
+User profile
+"""
+type UserProfileType implements Node {
+  """
+  User's first name
+  """
+  firstName: String!
+
+  """
+  User's full name
+  """
+  fullName: String!
+
+  """
+  Globally unique identifier
+  """
+  id: ID!
+
+  """
+  User's last name
+  """
+  lastName: String!
+}
+
+"""
+Sign in user via email
+"""
+input UserSignInInput {
+  """
+  User's account email
+  """
+  email: String!
+
+  """
+  User's account password
+  """
+  password: String!
+}
+
+"""
+Sign up user via email
+"""
+input UserSignUpInput {
+  """
+  User's account email
+  """
+  email: String!
+
+  """
+  User's first name
+  """
+  firstName: String!
+
+  """
+  User's last name
+  """
+  lastName: String!
+
+  """
+  User's account password
+  """
+  password: String!
+
+  """
+  User's account password confirmation
+  """
+  passwordConfirmation: String!
+}
